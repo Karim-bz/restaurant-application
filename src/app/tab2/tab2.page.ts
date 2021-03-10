@@ -1,20 +1,23 @@
 import { Component } from '@angular/core';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController} from '@ionic/angular';
 import { Photo, PhotoService } from '../services/photo.service';
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  styleUrls: ['tab2.page.scss'],
 })
 export class Tab2Page {
-
-  constructor(public photoService: PhotoService, public actionSheetController: ActionSheetController) {}
+  photoCategory = '';
+  constructor(
+    public photoService: PhotoService,
+    public actionSheetController: ActionSheetController
+  ) {}
 
   async ngOnInit() {
     await this.photoService.loadSaved();
   }
-  
+
   addPhotoToGallery() {
     this.photoService.addNewToGallery();
   }
@@ -22,23 +25,33 @@ export class Tab2Page {
   public async showActionSheet(photo: Photo, position: number) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Photos',
-      buttons: [{
-        text: 'Delete',
-        role: 'destructive',
-        icon: 'trash',
-        handler: () => {
-          this.photoService.deletePicture(photo, position);
-        }
-      }, {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-          // Nothing to do, action sheet is automatically closed
-          }
-      }]
+      buttons: [
+        {
+          text: 'Choose Category',
+          icon: 'apps',
+          role: 'null',
+          handler: () => {
+            this.photoService.openModal();
+          },
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          icon: 'trash',
+          handler: () => {
+            this.photoService.deletePicture(photo, position);
+          },
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            // Nothing to do, action sheet is automatically closed
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
-
 }

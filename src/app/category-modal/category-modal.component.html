@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Choisire une catégorie</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-radio-group (ionChange)="getCategory($event)">
+      <ion-item *ngFor="let category of categoryList">
+        <ion-label>{{ category.name }}</ion-label>
+        <ion-radio slot="start" [value]="category.name"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+</ion-content>
