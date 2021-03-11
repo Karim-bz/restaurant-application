@@ -59,7 +59,6 @@ export class PhotoService {
     });
     // Save the picture and add it to photo collection
     this.openModal()
-    // console.log(this.photos[0].category)
   }
 
   // Save picture to file on device
