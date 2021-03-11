@@ -30,33 +30,35 @@ export class PhotoService {
       component: CategoryModalComponent,
     });
 
-    modal.onDidDismiss().then((data) => {
+    modal.onDidDismiss().then(async (data) => {
       // const categorie = data['data'];
       this.choosenCategory = data['data'];
       console.log(this.choosenCategory);
+      this.savedImageFile = await this.savePicture(this.capturedPhoto);
+      // await this.openModal();
+      this.photos.unshift(this.savedImageFile);
+      // console.log('save', this.photos);
+
+      Storage.set({
+        key: this.PHOTO_STORAGE,
+        value: JSON.stringify(this.photos),
+      });
       // console.log('this is Photo service +', categorie);
       // console.log(this.choosenCategory);
     });
     await modal.present();
   }
-
+  savedImageFile:Photo;
+  capturedPhoto:any
   public async addNewToGallery() {
     // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
+  this.capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri, // file-based data; provides best performance
       source: CameraSource.Camera, // automatically take a new photo with the camera
       quality: 100, // highest quality (0 to 100)
     });
     // Save the picture and add it to photo collection
-    const savedImageFile = await this.savePicture(capturedPhoto);
-    // await this.openModal();
-    this.photos.unshift(savedImageFile);
-    // console.log('save', this.photos);
-
-    Storage.set({
-      key: this.PHOTO_STORAGE,
-      value: JSON.stringify(this.photos),
-    });
+    this.openModal()
     // console.log(this.photos[0].category)
   }
 
